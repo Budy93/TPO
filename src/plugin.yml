@@ -1,0 +1,9 @@
+name: Putzi
+main: de.daniel_brueggemann.tpoprojekt.Tpo
+author: Daniel, Budy93
+version: 1
+database: false
+commands:
+ Putzi:
+  usage: /tpo
+  description: Teleportiert dich zu einer bestimmten Koordinate
