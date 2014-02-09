@@ -38,43 +38,49 @@ public class Tpo extends JavaPlugin
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		Player player = (Player) sender;
+		String target=player.getName();
 		
 		if (!(sender instanceof Player))
 		{
 	           player.sendMessage(ChatColor.RED + "Du musst ein Spieler sein!");
 	           return false;
 	    }
-		if (args.length > 4) 
+		if (args.length > 3) 
 		{
 	           sender.sendMessage(ChatColor.RED + "Zu viele Argumente!");
 	           return true;
 	    } 
-		else if(args.length<4)
+		else if(args.length<3)
 		{
 			sender.sendMessage(ChatColor.RED + "Zu wenig Argumente!");
 			return true;
 		}
-		else if(args.length==4)
+		else if(cmd.getName().equalsIgnoreCase("bpo"))
 		{
-			String xa=args[1];
-			String ya=args[2];
-			String za=args[3];
-			//+12500 und -12500
-			int x = Integer.parseInt(xa);
-			//ebene 65 Nullebene
-			int y = Integer.parseInt(ya);
-			//12500 und -12500
-			int z = Integer.parseInt(za);
-			if(x<-12500 || x>12500 || z<-12500 || z>12500 || y<0)
-			{
-				sender.sendMessage(ChatColor.RED + "Zu hohe Koordinaten");
-				Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tpos 0 65 0");
+				String xa=args[0];
+				String ya=args[1];
+				getLogger().info("BPO Befehl genutzt von:"+target);
+				String za=args[2];
+				//+12500 und -12500
+				int x = Integer.parseInt(xa);
+				//ebene 65 Nullebene
+				int y = Integer.parseInt(ya);
+				//12500 und -12500
+				int z = Integer.parseInt(za);
+				if(x<=-12500 || x>=12500 || z<=-12500 || z>=12500 || y<=0)
+				{
+					sender.sendMessage(ChatColor.RED + "Zu hohe Koordinaten");
+					String falsch="tp "+target+" 0 65 0";
+					getLogger().info(falsch);
+					Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), falsch);
+					return true;
+				}
+				else
+				{
+					String Befehl="tp "+target+" "+x+" "+y+" "+z;
+					getLogger().info(Befehl);
+					Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), Befehl);
 				return true;
-			}
-			else
-			{
-			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tpos "+x+" "+y+" "+z);
-			return true;
 			}
 		}
 		return false;
