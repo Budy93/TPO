@@ -1,9 +1,27 @@
 name: BPO
-main: de.daniel_brueggemann.tpoprojekt.Tpo
+main: de.daniel_brueggemann.tpoprojekt.BPO
 author: Daniel, Budy93
 version: 1
 database: false
 commands:
  bpo:
-  usage: /bpo
-  description: Teleportiert dich zu einer bestimmten Koordinate
+  usage: /bpo x y z
+  description: Teleport in Range of the Worldboarder or directly to the coordinates.
+  permission: bpo.teleporting.normal
+  permission-message: You don't have the permission
+permissions:
+ bpo.*:
+  description: Gibt vollen Zugriff auf BPO
+  children:
+   bpo.teleporting.bypass: false
+   bpo.information.notice: false
+   bpo.information.error: false
+   bpo.teleporting.normal: false
+ bpo.teleporting.bypass:
+  description: Erlaubt es aus ueber die Worldborder zur porten.
+ bpo.information.notice:
+  description: Erlaubt es Tipps zu bekommen.
+ bpo.information.error:
+  description: Erlaubt es sonderfehler angezeigt zu bekommen.
+ bpo.teleporting.normal:
+  description: Erlaubt das Teleportieren innerhalb der Worldborder bzw auch ohne wenn das Plugin WorldBorder fehlt.
