@@ -32,7 +32,9 @@ public class BPO extends JavaPlugin
 	public int xrad;
 	public int zrad;
 	public int xsperr;
+	public int xsperrnegativ;
 	public int zsperr;
+	public int zsperrnegativ;
 	public int radius = 0;
 	public int xradiusbasis;
 	public int zradiusbasis;
@@ -56,7 +58,7 @@ public class BPO extends JavaPlugin
 		 * alternativ = getConfig().getString("Alternativ");
 		 */
 		getLogger().info("BPO aktiv!");
-		getLogger().info("BPO plugin by Daniel Brueggemann, Budy93 Version: 1");
+		getLogger().info("BPO plugin by Daniel Brueggemann, Budy93 Version: 1.01");
 	}
 	
 	/*
@@ -120,6 +122,7 @@ public class BPO extends JavaPlugin
 					String xa = args[0];
 					String ya = args[1];
 					getLogger().info("BPO Befehl genutzt von:" + target);
+					getLogger().info("No WorldBorder detected");
 					String za = args[2];
 					// +12500 und -12500
 					Boolean ok = true;
@@ -240,6 +243,7 @@ public class BPO extends JavaPlugin
             Player player, String target, FileConfiguration conwb, String welt)
             throws CommandException
     {
+    	getLogger().info("Vorgehen Runde World");
 	    xradiusbasis = conwb.getInt("worlds." + welt + ".x");
 	    zradiusbasis = conwb.getInt("worlds." + welt + ".z");
 	    radius = conwb.getInt("worlds." + welt + ".radiusX");
@@ -295,6 +299,7 @@ public class BPO extends JavaPlugin
 	    			getLogger().info(target+" Nutzte die bypass Permission");
 	    			if(player.hasPermission("bpo.information.notice"))
 	    			{
+	    				getLogger().info("Nutze Bypass Permission von"+target);
 	    				sender.sendMessage(ChatColor.BLUE
 	    			        + "Anmerkung: Zum nutzen des Bypass musst du auf die Bypass liste von WorldBoarder\nNutze dazu: /wb bypass "
 	    			        + target + " on bzw off zum Entfernen");
@@ -361,12 +366,15 @@ public class BPO extends JavaPlugin
             Player player, String target, FileConfiguration conwb, String welt)
             throws CommandException
     {
+    	getLogger().info("Eckige Welt vorhanden");
 	    xgrenz = conwb.getInt("worlds." + welt + ".x");
 	    zgrenz = conwb.getInt("worlds." + welt + ".z");
 	    xrad = conwb.getInt("worlds." + welt + ".radiusX");
 	    zrad = conwb.getInt("worlds." + welt + ".radiusZ");
 	    xsperr = xgrenz + xrad;
+	    xsperrnegativ=xgrenz-xrad;
 	    zsperr = zgrenz + zrad;
+	    zsperrnegativ=zgrenz-zrad;
 	    // Integer xInteger = new Integer(xsperr);
 	    // String xb = xInteger.toString();
 	    // Integer zInteger = new Integer(zsperr);
@@ -410,8 +418,9 @@ public class BPO extends JavaPlugin
 	    {
 	    	if(player.hasPermission("bpo.teleporting.bypass"))
 	    	{
-	    		if(x <= xsperr * -1 || x >= xsperr
-	    		        || z <= zsperr * -1 || z >= zsperr
+	    		getLogger().info("Nutzung der Bypass Permission von"+target);
+	    		if(x <= xsperrnegativ || x >= xsperr
+	    		        || z <= zsperrnegativ || z >= zsperr
 	    		        || y <= 0)
 	    		{
 	    			getLogger().info(target+" Nutzte die bypass Permission");
@@ -431,23 +440,23 @@ public class BPO extends JavaPlugin
 	    	}
 	    	else
 	    	{
-	    		if(x <= xsperr * -1 || x >= xsperr
-	    		        || z <= zsperr * -1 || z >= zsperr
+	    		if(x <= xsperrnegativ || x >= xsperr
+	    		        || z <= zsperrnegativ || z >= zsperr
 	    		        || y <= 0)
 	    		{
 	    			sender.sendMessage(ChatColor.RED
 	    			        + "Zu hohe Koordinaten du wurdest zu einen Alternativ Punkt geportet");
-	    			if(x <= xsperr * -1)
+	    			if(x <= xsperrnegativ)
 	    			{
-	    				x = xsperr * -1;
+	    				x = xsperrnegativ;
 	    			}
 	    			if(x >= xsperr)
 	    			{
 	    				x = xsperr;
 	    			}
-	    			if(z <= zsperr * -1)
+	    			if(z <= zsperrnegativ)
 	    			{
-	    				z = zsperr * -1;
+	    				z = zsperrnegativ;
 	    			}
 	    			if(z >= zsperr)
 	    			{
