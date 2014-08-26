@@ -6,6 +6,7 @@ package de.daniel_brueggemann.tpoprojekt;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
@@ -45,7 +46,7 @@ public class BPO extends JavaPlugin
 	public WorldBorder wb;
 	public int anderesZ;
 	Vector ca;
-	private Location ziel;
+	public Location ziel;
 	
 	public void onEnable()
 	{
@@ -172,10 +173,9 @@ public class BPO extends JavaPlugin
 						                + " " + z + " Teleportiert");
 						//String Befehl = "tp " + target + " " + x + " " + y
 						  //      + " " + z;
-						ziel.setX(x);
-						ziel.setY(y);
-						ziel.setZ(z);
-						player.teleport(ziel);
+						World world=player.getWorld();
+		    			Location l=new Location(world,x,y,z);
+						player.teleport(l);
 						//Bukkit.getServer().dispatchCommand(
 						//        Bukkit.getServer().getConsoleSender(), Befehl);
 						return true;
@@ -314,9 +314,13 @@ public class BPO extends JavaPlugin
 	    		}
 	    		String Befehl = "tp " + target + " " + x + " " + y
 	    		        + " " + z;
-	    		Bukkit.getServer().dispatchCommand(
-	    		        Bukkit.getServer().getConsoleSender(),
-	    		        Befehl);
+	    		getLogger().info(Befehl);
+	    		World world=player.getWorld();
+    			Location l=new Location(world,x,y,z);
+				player.teleport(l);
+//	    		Bukkit.getServer().dispatchCommand(
+//	    		        Bukkit.getServer().getConsoleSender(),
+//	    		        Befehl);
 	    		return true;
 	    	}
 	    	else
@@ -353,9 +357,13 @@ public class BPO extends JavaPlugin
 	    			}
 	    			String Befehl = "tp " + target + " " + xradiusbasis + " "
 	    			        + y + " " + zradiusbasis;
-	    			Bukkit.getServer().dispatchCommand(
-	    			        Bukkit.getServer().getConsoleSender(),
-	    			        Befehl);
+	    			World world=player.getWorld();
+	    			Location l=new Location(world,x,y,z);
+					player.teleport(l);
+					getLogger().info(Befehl);
+//	    			Bukkit.getServer().dispatchCommand(
+//	    			        Bukkit.getServer().getConsoleSender(),
+//	    			        Befehl);
 	    			return true;
 	    		}
 	    		else
@@ -366,9 +374,12 @@ public class BPO extends JavaPlugin
 	    			// sender.sendMessage(zb);
 	    			// sender.sendMessage(welt);
 	    			getLogger().info(Befehl);
-	    			Bukkit.getServer().dispatchCommand(
-	    			        Bukkit.getServer().getConsoleSender(),
-	    			        Befehl);
+	    			World world=player.getWorld();
+	    			Location l=new Location(world,x,y,z);
+					player.teleport(l);
+//	    			Bukkit.getServer().dispatchCommand(
+//	    			        Bukkit.getServer().getConsoleSender(),
+//	    			        Befehl);
 	    			return true;
 	    		}
 	    	}
@@ -474,10 +485,9 @@ public class BPO extends JavaPlugin
 	    			        + target + " on bzw off zum Entfernen");
 	    			}
 	    		}
-	    		ziel.setX(x);
-				ziel.setY(y);
-				ziel.setZ(z);
-				player.teleport(ziel);
+	    		World world=player.getWorld();
+    			Location l=new Location(world,x,y,z);
+				player.teleport(l);
 				getLogger().info(target+" Wurde nach "+x+" "+y+" "+z+" teleportiert.");
 				/*
 	    		String Befehl = "tp " + target + " " + x + " " + y
@@ -514,15 +524,14 @@ public class BPO extends JavaPlugin
 	    			}
 	    			if(y<=0)
 	    			{
-	    				y=1;
+	    				y=5;
 	    			}
 	    			String falsch = "tp " + target + " " + x + " "
 	    			        + y + " " + z;
 	    			getLogger().info(falsch);
-	    			ziel.setX(x);
-					ziel.setY(y);
-					ziel.setZ(z);
-					player.teleport(ziel);
+	    			World world=player.getWorld();
+	    			Location l=new Location(world,x,y,z);
+					player.teleport(l);
 	    			/*
 					Bukkit.getServer().dispatchCommand(
 	    			        Bukkit.getServer().getConsoleSender(),
@@ -538,10 +547,9 @@ public class BPO extends JavaPlugin
 	    			// sender.sendMessage(zb);
 	    			// sender.sendMessage(welt);
 	    			getLogger().info(Befehl);
-	    			ziel.setX(x);
-					ziel.setY(y);
-					ziel.setZ(z);
-					player.teleport(ziel);
+	    			World world=player.getWorld();
+	    			Location l=new Location(world,x,y,z);
+					player.teleport(l);
 					/*
 	    			Bukkit.getServer().dispatchCommand(
 	    			        Bukkit.getServer().getConsoleSender(),
