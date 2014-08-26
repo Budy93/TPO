@@ -5,12 +5,14 @@ package de.daniel_brueggemann.tpoprojekt;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 import com.wimbli.WorldBorder.WorldBorder;
 
@@ -41,6 +43,9 @@ public class BPO extends JavaPlugin
 	public Boolean rundglobal = false;
 	public Boolean weltrund = false;
 	public WorldBorder wb;
+	public int anderesZ;
+	Vector ca;
+	private Location ziel;
 	
 	public void onEnable()
 	{
@@ -50,6 +55,7 @@ public class BPO extends JavaPlugin
 		 * getConfig().addDefault("x:", "12500"); getConfig().addDefault("z:",
 		 * "12500"); getConfig().addDefault("Alternativ", "0 65 0");
 		 */
+		getConfig().options().copyDefaults(true);
 		saveConfig();
 		active = getConfig().getBoolean("Active");
 		prefix = getConfig().getString("Prefix");
@@ -164,10 +170,14 @@ public class BPO extends JavaPlugin
 						getLogger().info(
 						        "BPO hat " + target + " nach " + x + " " + y
 						                + " " + z + " Teleportiert");
-						String Befehl = "tp " + target + " " + x + " " + y
-						        + " " + z;
-						Bukkit.getServer().dispatchCommand(
-						        Bukkit.getServer().getConsoleSender(), Befehl);
+						//String Befehl = "tp " + target + " " + x + " " + y
+						  //      + " " + z;
+						ziel.setX(x);
+						ziel.setY(y);
+						ziel.setZ(z);
+						player.teleport(ziel);
+						//Bukkit.getServer().dispatchCommand(
+						//        Bukkit.getServer().getConsoleSender(), Befehl);
 						return true;
 					}
 					else
@@ -288,10 +298,7 @@ public class BPO extends JavaPlugin
 	    }
 	    if(ok == true)
 	    {
-	    	int xbetrag=Math.abs(x)+Math.abs(xradiusbasis);
-	    	int zbetrag=Math.abs(z)+Math.abs(zradiusbasis);
-	    	double zwischenspeicher=Math.pow(xbetrag,2)+Math.pow(zbetrag,2);
-	    	int userradius=(int)Math.sqrt(zwischenspeicher);
+	    	int userradius = radiusberechner(x, z);
 	    	if(player.hasPermission("bpo.teleporting.bypass"))
 	    	{
 	    		if(userradius>=radius)
@@ -327,6 +334,28 @@ public class BPO extends JavaPlugin
 	    			        Bukkit.getServer().getConsoleSender(),
 	    			        falsch);
 	    			        */
+	    			/*
+	    			double zwisch1=z+zradiusbasis;
+	    			double winkelrechenwert=zwisch1/(double)userradius;
+	    			double winkelalpha=Math.asin(winkelrechenwert);
+	    			player.sendMessage("Der Winkerl ist: "+winkelalpha+"Sowie sinwert: "+winkelrechenwert);
+	    			player.sendMessage("Z ist:"+z+" Basis ist:"+zradiusbasis+" Der Radius währe:"+userradius+" Zwischenwert:"+zwisch1);
+	    			double cosalpha=Math.cos(winkelalpha);
+	    			double newz=(winkelrechenwert*radius);
+	    			double newx=(cosalpha*radius);
+	    			player.sendMessage("Das neue z und x sind:"+newz+" "+newx);
+	    			*/
+	    			//newz=newz +zradiusbasis;
+	    			//newx=newx+xradiusbasis;
+	    			if(y<=0)
+	    			{
+	    				y=1;
+	    			}
+	    			String Befehl = "tp " + target + " " + xradiusbasis + " "
+	    			        + y + " " + zradiusbasis;
+	    			Bukkit.getServer().dispatchCommand(
+	    			        Bukkit.getServer().getConsoleSender(),
+	    			        Befehl);
 	    			return true;
 	    		}
 	    		else
@@ -353,6 +382,20 @@ public class BPO extends JavaPlugin
     }
 
 	/**
+	 * @param x
+	 * @param z
+	 * @return
+	 */
+    private int radiusberechner(int x, int z)
+    {
+	    int xbetrag=Math.abs(x)+Math.abs(xradiusbasis);
+	    int zbetrag=Math.abs(z)+Math.abs(zradiusbasis);
+	    double zwischenspeicher=Math.pow(xbetrag,2)+Math.pow(zbetrag,2);
+	    int userradius=(int)Math.sqrt(zwischenspeicher);
+	    return userradius;
+    }
+
+	/**
 	 * @param sender
 	 * @param args
 	 * @param player
@@ -366,7 +409,7 @@ public class BPO extends JavaPlugin
             Player player, String target, FileConfiguration conwb, String welt)
             throws CommandException
     {
-    	getLogger().info("Eckige Welt vorhanden");
+    	//getLogger().info("Eckige Welt vorhanden");
 	    xgrenz = conwb.getInt("worlds." + welt + ".x");
 	    zgrenz = conwb.getInt("worlds." + welt + ".z");
 	    xrad = conwb.getInt("worlds." + welt + ".radiusX");
@@ -431,11 +474,18 @@ public class BPO extends JavaPlugin
 	    			        + target + " on bzw off zum Entfernen");
 	    			}
 	    		}
+	    		ziel.setX(x);
+				ziel.setY(y);
+				ziel.setZ(z);
+				player.teleport(ziel);
+				getLogger().info(target+" Wurde nach "+x+" "+y+" "+z+" teleportiert.");
+				/*
 	    		String Befehl = "tp " + target + " " + x + " " + y
 	    		        + " " + z;
 	    		Bukkit.getServer().dispatchCommand(
 	    		        Bukkit.getServer().getConsoleSender(),
 	    		        Befehl);
+	    		        */
 	    		return true;
 	    	}
 	    	else
@@ -462,12 +512,22 @@ public class BPO extends JavaPlugin
 	    			{
 	    				z = zsperr;
 	    			}
+	    			if(y<=0)
+	    			{
+	    				y=1;
+	    			}
 	    			String falsch = "tp " + target + " " + x + " "
 	    			        + y + " " + z;
 	    			getLogger().info(falsch);
-	    			Bukkit.getServer().dispatchCommand(
+	    			ziel.setX(x);
+					ziel.setY(y);
+					ziel.setZ(z);
+					player.teleport(ziel);
+	    			/*
+					Bukkit.getServer().dispatchCommand(
 	    			        Bukkit.getServer().getConsoleSender(),
 	    			        falsch);
+	    			        */
 	    			return true;
 	    		}
 	    		else
@@ -478,9 +538,15 @@ public class BPO extends JavaPlugin
 	    			// sender.sendMessage(zb);
 	    			// sender.sendMessage(welt);
 	    			getLogger().info(Befehl);
+	    			ziel.setX(x);
+					ziel.setY(y);
+					ziel.setZ(z);
+					player.teleport(ziel);
+					/*
 	    			Bukkit.getServer().dispatchCommand(
 	    			        Bukkit.getServer().getConsoleSender(),
 	    			        Befehl);
+	    			        */
 	    			return true;
 	    		}
 	    	}

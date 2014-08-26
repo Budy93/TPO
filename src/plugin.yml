@@ -1,7 +1,7 @@
 name: BPO
 main: de.daniel_brueggemann.tpoprojekt.BPO
 author: Daniel, Budy93
-version: 1.01
+version: 1.02
 database: false
 commands:
  bpo:
